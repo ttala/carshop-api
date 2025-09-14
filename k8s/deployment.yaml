@@ -17,7 +17,7 @@ spec:
       - name: ghcr-secret
       containers:
       - name: carshop-api
-        image: ghcr.io/ttala/Carshop-API:latest
+        image: ghcr.io/ttala/carshop-api:31813cb7fe093d36d0db41131fc3318f8163bcf9
         ports:
         - containerPort: 8000
         resources:
