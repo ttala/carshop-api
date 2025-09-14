@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carshop-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carshop-api
+  template:
+    metadata:
+      labels:
+        app: carshop-api
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: carshop-api
+        image: ghcr.io/ttala/Carshop-API:latest
+        ports:
+        - containerPort: 8000
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: carshop-api
+  namespace: default
+spec:
+  selector:
+    app: carshop-api
+  ports:
+  - port: 80
+    targetPort: 8000
+  type: ClusterIP
