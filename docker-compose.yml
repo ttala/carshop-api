@@ -21,8 +21,8 @@ services:
 
 
   web-app:
-    build: .
-    #image: ttyeri/carshop:latest
+    #build: .
+    image: ghcr.io/ttala/carshop-api:latest
     container_name: carshop
     ports:
       - "8000:8000"
