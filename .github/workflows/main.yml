@@ -58,15 +58,28 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ github.sha }}
 
     # Update deployment manifest and commit
-    - name: Update deployment.yaml
+    - name: Update GitOps repository
+      shell: bash
+      env:
+        GIT_TOKEN: ${{secrets.CR_PAT}}
       run: |
-          IMAGE=ghcr.io/${{ github.repository }}:${{ github.sha }}
-          sed -i "s#image:.*#image: $IMAGE#g" k8s/deployment.yaml
+          # Configure git credential store
+          git config --global credential.helper store
+          echo "https://${GIT_TOKEN}:x-oauth-basic@github.com" > ~/.git-credentials
+          
+          # Remove any existing gitops directory
+          rm -rf gitops
+          
+          # Clone repository using HTTPS URL without token
+          git clone https://github.com/ttala/carshop-gitops.git gitops
+          cd gitops
 
-    - name: Commit updated deployment.yaml
-      run: |
+          IMAGE=ghcr.io/${{ github.repository }}:${{ github.sha }}
+          sed -i "s#image:.*#image: $IMAGE#g" deployment.yaml
+
+          # Commit changes
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-          git add k8s/deployment.yaml
+          git add deployment.yaml
           git commit -m "Update image tag to ${{ github.sha }}"
-          git push
+          git push -f https://${GIT_TOKEN}@github.com/ttala/carshop-gitops.git main
