@@ -30,7 +30,6 @@ spec:
         app: web-carshop
     spec:
       containers:
-<<<<<<< HEAD
         - name: web-carshop
           image: ghcr.io/ttala/carshop:latest
           ports:
