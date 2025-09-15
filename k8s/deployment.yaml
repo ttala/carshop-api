@@ -32,7 +32,7 @@ spec:
       containers:
 <<<<<<< HEAD
         - name: web-carshop
-          image: ghcr.io/ttala/carshop:latest
+          image: ghcr.io/ttala/carshop-api:152fb81af6b0607debe550fc019e6adda0f81170
           ports:
             - containerPort: 8000
           env:
